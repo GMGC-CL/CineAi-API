@@ -21,13 +21,13 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class Api:
     #API que irá indicar os filmes retornando os 20 primeiros 
-    def cousine_movies(self,filme:int):
+    def cousine_movies(self,filme:int,limite:int):
         #def cousine_movies - função que irá indicar os filmes mais parecidos
         try:
             if not isinstance(filme, int):
                 raise TypeError("Valor de ID inválido")
             #passa todos os objetos do banco de dados para json
-            jMovies = [transform_to_json(i) for i in Movie.get_all()]
+            jMovies = [transform_to_json(i) for i in Movie.get_all(2668)]
             #transforma tudo em dataframe
             dfMovie = pd.json_normalize(jMovies)
             #concatena todos as informaçòes dos filmes em uma coluna
@@ -48,7 +48,7 @@ class Api:
             #adiciona todas as colunas para retornar para o front
             dfFinal = pd.merge(dfCosine, dfMovie, how='inner', on='id_filme_tmdb')
             #retorna os 20 filmes mais parecidos
-            return dfFinal[0:20].to_dict(orient='records')
+            return dfFinal[0:limite].to_dict(orient='records')
         except TypeError as e:
             print(e)
             print('Não foi possível encontrar o filme')

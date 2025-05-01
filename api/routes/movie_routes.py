@@ -62,8 +62,9 @@ def get_movie_by_id(movie_id):
 
 @movie_routes.route('/movies/<int:movie_id>/similar', methods=['GET'])
 def get_consine_movie_by_id(movie_id):
+    limit_query = request.args.get('limit', default=10, type=int)
     try:
-        jMovie = api.cousine_movies(movie_id)
+        jMovie = api.cousine_movies(movie_id,limit_query)
         return jsonify(jMovie), 200
     except Exception as e:
         print(e)
