@@ -1,8 +1,9 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify,send_from_directory
 from api.controllers.movie_controller import Api
 from werkzeug.exceptions import HTTPException
 movie_routes = Blueprint('movie_routes', __name__)
 api = Api()
+
 
 
 @movie_routes.route('/', methods=['GET'])

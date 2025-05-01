@@ -1,0 +1,218 @@
+openapi: 3.0.0
+info:
+  title: API de Filmes
+  description: API para gerenciamento de filmes, gêneros, avaliações e usuários.
+  version: 1.0.0
+
+servers:
+  - url: https://cineai-njbu.onrender.com
+
+paths:
+  /movies:
+    get:
+      summary: Listar todos os filmes
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+          required: false
+          description: Número máximo de filmes a retornar
+      responses:
+        '200':
+          description: Lista de filmes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /genres:
+    get:
+      summary: Listar todos os gêneros
+      responses:
+        '200':
+          description: Lista de gêneros
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /movies/genre/{genre_id}:
+    get:
+      summary: Listar filmes por gênero
+      parameters:
+        - name: genre_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID ou nome do gênero
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+          description: Número máximo de filmes a retornar
+      responses:
+        '200':
+          description: Lista de filmes do gênero
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /movies/name/{movie_name}:
+    get:
+      summary: Buscar filmes pelo nome
+      parameters:
+        - name: movie_name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de filmes encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /movies/{movie_id}:
+    get:
+      summary: Buscar filme por ID
+      parameters:
+        - name: movie_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Filme encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /movies/{movie_id}/similar:
+    get:
+      summary: Buscar filmes semelhantes
+      parameters:
+        - name: movie_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de filmes semelhantes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /movies/{filme_id}/avaliar:
+    post:
+      summary: Avaliar um filme
+      parameters:
+        - name: filme_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario_id:
+                  type: string
+                nota:
+                  type: number
+                comentario:
+                  type: string
+      responses:
+        '201':
+          description: Avaliação registrada
+        '400':
+          description: Campos obrigatórios faltando
+
+  /movies/{movie_id}/avaliacoes:
+    get:
+      summary: Listar avaliações de um filme
+      parameters:
+        - name: movie_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de avaliações
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /usuarios/registrar:
+    post:
+      summary: Registrar novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                email:
+                  type: string
+                senha:
+                  type: string
+      responses:
+        '201':
+          description: Usuário registrado
+
+  /usuarios/login:
+    post:
+      summary: Login do usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                senha:
+                  type: string
+      responses:
+        '200':
+          description: Token de autenticação
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
