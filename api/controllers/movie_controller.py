@@ -27,7 +27,7 @@ class Api:
             if not isinstance(filme, int):
                 raise TypeError("Valor de ID inválido")
             #passa todos os objetos do banco de dados para json
-            jMovies = [transform_to_json(i) for i in Movie.get_all()]
+            jMovies = [transform_to_json(i) for i in Movie.get_all(2668)]
             #transforma tudo em dataframe
             dfMovie = pd.json_normalize(jMovies)
             #concatena todos as informaçòes dos filmes em uma coluna
