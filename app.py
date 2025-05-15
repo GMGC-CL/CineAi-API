@@ -1,8 +1,10 @@
 from flask import Flask,send_from_directory
 from flask_swagger_ui import get_swaggerui_blueprint
 from api.routes.movie_routes import movie_routes
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.register_blueprint(movie_routes)
 
 
