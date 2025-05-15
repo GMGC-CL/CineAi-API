@@ -223,12 +223,49 @@ class Movie:
         if not user:
             raise PermissionError("Credenciais inválidas")
         return user
+    
+    @staticmethod
+    def put_preference(user_id,id_filme):
+        """
+        registrar_usuario - função para registrar novo usuário
+        
+        :params user_id: id do usuario
+        :params id_filme: id do filme que ele gosta
+        
+        :return: True se sucesso, senão lança erro
+        """
+        conn = get_db()
+        cursor = conn.cursor()
 
+        cursor.execute("INSERT INTO preferencias_usuario (usuario_id,filme_id) VALUES (?, ?)",(user_id,id_filme))
+        conn.commit()
+        return True
+    
+    @staticmethod  
+    def get_preference(user_id:int):
+        """
+            post_movie_for_name - função que retorna o filme pelo nome
+
+            :params user_id: id do usuario
+
+            :return: retorna a avaliação do filme
+        """
+        
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute(
+        "SELECT * FROM preferencias_usuario WHERE usuario_id = ?",
+        (user_id,),
+            )
+        retorno = cursor.fetchall()
+        if not retorno:
+            raise IndexError("avaliacao não encontrada")
+        else:
+            return retorno
 
 
 if __name__ == '__main__':
-    linhas = Movie.get_movie_for_name('Toy Story')
-    for linha in linhas:
-        print(dict(linha))
+    linhas = Movie.put_preference('1','1234')
+    print(linhas)
 
 

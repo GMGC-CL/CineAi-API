@@ -94,6 +94,29 @@ def registrar_avaliacao(filme_id):
         print(e)
         return jsonify({'error': 'Erro no servidor ao registrar avaliação'}), 500
     
+
+@movie_routes.route('/movies/preferencia', methods=['POST'])
+def registrar_prefetencia():
+    try:
+        data = request.get_json()
+
+        usuario_id = data.get("usuario_id")
+        filme = data.get("filme_id")
+
+        if not usuario_id or not filme:
+            return jsonify({'error': 'Campos obrigatórios não fornecidos'}), 400
+
+        sucesso = api.regitrar_preferencia(usuario_id, filme)
+
+        if sucesso:
+            return jsonify({'message': 'preferencia registrada com sucesso'}), 201
+        else:
+            return jsonify({'error': 'Erro ao registrar avaliação'}), 500
+
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Erro no servidor ao registrar avaliação'}), 500
+    
     
 @movie_routes.route('/movies/<int:movie_id>/avaliacoes', methods=['GET'])
 def get_avaliacao(movie_id):
@@ -155,3 +178,17 @@ def autenticar_usuario():
     except Exception as e:
         print(e)
         return jsonify({'error': 'Erro no servidor ao autenticar usuário'}), 500
+
+
+
+@movie_routes.route('/preferencias/<int:user_id>', methods=['GET'])
+def get_preferencia(user_id):
+    try:
+        avaliacoes = api.get_preference(str(user_id))
+        if avaliacoes:
+            return jsonify(avaliacoes), 200
+        else:
+            return jsonify({'message': 'Nenhuma avaliação encontrada'}), 404
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Erro ao buscar avaliações'}), 500
