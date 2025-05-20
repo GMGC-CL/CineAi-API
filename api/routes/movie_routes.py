@@ -96,7 +96,7 @@ def registrar_avaliacao(filme_id):
     
 
 @movie_routes.route('/movies/preferencia', methods=['POST'])
-def registrar_prefetencia():
+def registrar_preferencia():
     try:
         data = request.get_json()
 
@@ -192,3 +192,39 @@ def get_preferencia(user_id):
     except Exception as e:
         print(e)
         return jsonify({'error': 'Erro ao buscar avaliações'}), 500
+    
+
+@movie_routes.route('/preferencias/genero/<int:user_id>', methods=['GET'])
+def get_genre_preferencia(user_id):
+    try:
+        avaliacoes = api.get_genre_preference(str(user_id))
+        if avaliacoes:
+            return jsonify(avaliacoes), 200
+        else:
+            return jsonify({'message': 'Nenhuma avaliação encontrada'}), 404
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Erro ao buscar avaliações'}), 500
+    
+
+@movie_routes.route('/movies/genero/preferencia', methods=['POST'])
+def registrar_genre_preferencia():
+    try:
+        data = request.get_json()
+
+        usuario_id = data.get("usuario_id")
+        genero = data.get("genero_id")
+
+        if not usuario_id or not genero:
+            return jsonify({'error': 'Campos obrigatórios não fornecidos'}), 400
+
+        sucesso = api.regitrar_genre_preferencia(usuario_id, genero)
+
+        if sucesso:
+            return jsonify({'message': 'preferencia registrada com sucesso'}), 201
+        else:
+            return jsonify({'error': 'Erro ao registrar avaliação'}), 500
+
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Erro no servidor ao registrar avaliação'}), 500

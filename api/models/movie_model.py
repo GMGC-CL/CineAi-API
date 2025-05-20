@@ -248,7 +248,7 @@ class Movie:
 
             :params user_id: id do usuario
 
-            :return: retorna a avaliação do filme
+            :return: retorna prerencias dos filmes
         """
         
         conn = get_db()
@@ -259,7 +259,47 @@ class Movie:
             )
         retorno = cursor.fetchall()
         if not retorno:
-            raise IndexError("avaliacao não encontrada")
+            raise IndexError("preferencia não encontrada")
+        else:
+            return retorno
+        
+
+    @staticmethod
+    def put_preference_genre(user_id,id_genero):
+        """
+        registrar_usuario - função para registrar novo usuário
+        
+        :params user_id: id do usuario
+        :params id_filme: id do genero que ele gosta
+        
+        :return: True se sucesso, senão lança erro
+        """
+        conn = get_db()
+        cursor = conn.cursor()
+
+        cursor.execute("INSERT INTO usuario_genero (id_usuario,id_genero) VALUES (?, ?)",(user_id,id_genero))
+        conn.commit()
+        return True
+    
+    @staticmethod  
+    def get_preference_genre(user_id:int):
+        """
+            post_movie_for_name - função que retorna o filme pelo nome
+
+            :params user_id: id do usuario
+
+            :return: retorna a genero do usuario
+        """
+        
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute(
+        "SELECT * FROM usuario_genero WHERE id_usuario = ?",
+        (user_id,),
+            )
+        retorno = cursor.fetchall()
+        if not retorno:
+            raise IndexError("genero não encontrada")
         else:
             return retorno
 

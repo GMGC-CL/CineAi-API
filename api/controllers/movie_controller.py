@@ -272,3 +272,41 @@ class Api:
             print(e)
             print('Não foi possível encontrar os filmes')
             return False
+        
+
+    def regitrar_genre_preferencia(self,usuario_id:str, id_genero:str):
+        """
+            post_movie_for_name - função que retorna o filme pelo nome
+
+            :params usuario_id: id do usuario que ta guardando o filme
+            :params filme_id: id do filme
+
+            :return: retorna true em caso de sucesso
+        """
+        try:
+            #passa todos os objetos do banco de dados para json
+            Movie.put_preference_genre(usuario_id,id_genero)
+            #retorna todos os filmes filtrados pelo id
+            return True
+        except Exception as e:
+            print(e)
+            print('Não foi possível encontrar os filmes')
+            return False
+        
+    def get_genre_preference(self,user_id:int):
+        """
+            post_movie_for_name - função que retorna o filme pelo nome
+
+            :params user_id: id do usuario que tem as preferencias
+
+            :return: retorna true em caso de sucesso
+        """
+        try:
+            #passa todos os objetos do banco de dados para json
+            jAvalicoes = Movie.get_preference_genre(user_id)
+            #retorna todos os filmes filtrados pelo id
+            return [transform_to_json(i) for i in jAvalicoes]
+        except Exception as e:
+            print(e)
+            print('Não foi possível encontrar os filmes')
+            return False
