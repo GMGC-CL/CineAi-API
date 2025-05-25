@@ -302,41 +302,39 @@ class Movie:
             raise IndexError("genero não encontrada")
         else:
             return retorno
-
-    # Adicione este método na classe Movie do arquivo movie_model.py
-
-@staticmethod  
-def get_avaliacoes_usuario(user_id: int):
-    """
-        get_avaliacoes_usuario - função que retorna todas as avaliações feitas por um usuário específico
-
-        :params user_id: id do usuário para buscar suas avaliações (INTEGER)
-
-        :return: retorna todas as avaliações do usuário com informações básicas do filme
-    """
-    if not isinstance(user_id, int):
-        raise ValueError("Valor de usuário inválido - deve ser um inteiro")
+   
+    @staticmethod  
+    def get_avaliacoes_usuario(user_id: int):
+        """
+            get_avaliacoes_usuario - função que retorna todas as avaliações feitas por um usuário específico
     
-    conn = get_db()
-    cursor = conn.cursor()
+            :params user_id: id do usuário para buscar suas avaliações (INTEGER)
     
-    # Query que junta avaliações com informações dos filmes (usando apenas campos que existem)
-    query = """
-        SELECT a.id_avaliacao, a.id_usuario, a.id_filme_tmdb, a.nota, 
-               a.comentario, a.data_avaliacao, f.nome as titulo_filme
-        FROM avaliacoes a
-        JOIN filmes f ON a.id_filme_tmdb = f.id_filme_tmdb
-        WHERE a.id_usuario = ?
-        ORDER BY a.data_avaliacao DESC
-    """
-    
-    cursor.execute(query, (user_id,))
-    retorno = cursor.fetchall()
-    
-    if not retorno:
-        raise IndexError("Nenhuma avaliação encontrada para este usuário")
-    else:
-        return retorno
+            :return: retorna todas as avaliações do usuário com informações básicas do filme
+        """
+        if not isinstance(user_id, int):
+            raise ValueError("Valor de usuário inválido - deve ser um inteiro")
+        
+        conn = get_db()
+        cursor = conn.cursor()
+        
+        # Query que junta avaliações com informações dos filmes (usando apenas campos que existem)
+        query = """
+            SELECT a.id_avaliacao, a.id_usuario, a.id_filme_tmdb, a.nota, 
+                   a.comentario, a.data_avaliacao, f.nome as titulo_filme
+            FROM avaliacoes a
+            JOIN filmes f ON a.id_filme_tmdb = f.id_filme_tmdb
+            WHERE a.id_usuario = ?
+            ORDER BY a.data_avaliacao DESC
+        """
+        
+        cursor.execute(query, (user_id,))
+        retorno = cursor.fetchall()
+        
+        if not retorno:
+            raise IndexError("Nenhuma avaliação encontrada para este usuário")
+        else:
+            return retorno
 
 
 if __name__ == '__main__':
