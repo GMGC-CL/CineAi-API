@@ -94,13 +94,14 @@ def registrar_avaliacao(filme_id):
         print(e)
         return jsonify({'error': 'Erro no servidor ao registrar avaliação'}), 500
     
+
 @movie_routes.route('/usuarios/<int:user_id>/avaliacoes', methods=['GET'])
 def get_avaliacoes_usuario(user_id):
     """
     Endpoint para buscar todas as avaliações feitas por um usuário específico
     """
     try:
-        avaliacoes = api.get_avaliacoes_usuario(str(user_id))
+        avaliacoes = api.get_avaliacoes_usuario(user_id)  
         
         if avaliacoes is False:
             return jsonify({'error': 'Erro interno do servidor'}), 500
