@@ -190,6 +190,26 @@ class Api:
             print(e)
             print('Não foi possível encontrar os filmes')
             return False
+   
+    def get_avaliacoes_usuario(self, user_id: int):
+        """
+            get_avaliacoes_usuario - função que retorna todas as avaliações de um usuário
+    
+            :params user_id: id do usuário para consulta (INTEGER)
+    
+            :return: retorna lista com todas as avaliações do usuário
+        """
+        try:
+            # Busca as avaliações do usuário no banco de dados
+            avaliacoes = Movie.get_avaliacoes_usuario(user_id)
+            # Converte para JSON e retorna
+            return [transform_to_json(i) for i in avaliacoes]
+        except IndexError as e:
+            print(f"Nenhuma avaliação encontrada: {e}")
+            return []
+        except Exception as e:
+            print(f"Erro ao buscar avaliações do usuário: {e}")
+            return False
     
     def registrar_usuario(self,nome:str, email: str, senha: str):
         """
