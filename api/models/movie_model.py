@@ -303,7 +303,8 @@ class Movie:
         else:
             return retorno
 
-    
+    # Adicione este método na classe Movie do arquivo movie_model.py
+
 @staticmethod  
 def get_avaliacoes_usuario(user_id: int):
     """
@@ -311,7 +312,7 @@ def get_avaliacoes_usuario(user_id: int):
 
         :params user_id: id do usuário para buscar suas avaliações (INTEGER)
 
-        :return: retorna todas as avaliações do usuário com informações do filme
+        :return: retorna todas as avaliações do usuário com informações básicas do filme
     """
     if not isinstance(user_id, int):
         raise ValueError("Valor de usuário inválido - deve ser um inteiro")
@@ -319,11 +320,10 @@ def get_avaliacoes_usuario(user_id: int):
     conn = get_db()
     cursor = conn.cursor()
     
-    # Query que junta avaliações com informações dos filmes
+    # Query que junta avaliações com informações dos filmes (usando apenas campos que existem)
     query = """
         SELECT a.id_avaliacao, a.id_usuario, a.id_filme_tmdb, a.nota, 
-               a.comentario, a.data_avaliacao,
-               f.titulo, f.poster_path, f.ano_lancamento, f.media_votos
+               a.comentario, a.data_avaliacao, f.nome as titulo_filme
         FROM avaliacoes a
         JOIN filmes f ON a.id_filme_tmdb = f.id_filme_tmdb
         WHERE a.id_usuario = ?
