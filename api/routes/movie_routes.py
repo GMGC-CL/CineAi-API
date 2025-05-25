@@ -94,7 +94,25 @@ def registrar_avaliacao(filme_id):
         print(e)
         return jsonify({'error': 'Erro no servidor ao registrar avaliação'}), 500
     
-
+@movie_routes.route('/usuarios/<int:user_id>/avaliacoes', methods=['GET'])
+def get_avaliacoes_usuario(user_id):
+    """
+    Endpoint para buscar todas as avaliações feitas por um usuário específico
+    """
+    try:
+        avaliacoes = api.get_avaliacoes_usuario(str(user_id))
+        
+        if avaliacoes is False:
+            return jsonify({'error': 'Erro interno do servidor'}), 500
+        elif len(avaliacoes) == 0:
+            return jsonify({'message': 'Nenhuma avaliação encontrada para este usuário', 'avaliacoes': []}), 200
+        else:
+            return jsonify({'avaliacoes': avaliacoes}), 200
+            
+    except Exception as e:
+        print(f"Erro na rota de avaliações do usuário: {e}")
+        return jsonify({'error': 'Erro ao buscar avaliações do usuário'}), 500
+        
 @movie_routes.route('/movies/preferencia', methods=['POST'])
 def registrar_preferencia():
     try:
