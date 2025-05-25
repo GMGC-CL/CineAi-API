@@ -321,7 +321,7 @@ class Movie:
         # Query que junta avaliações com informações dos filmes (usando apenas campos que existem)
         query = """
             SELECT a.id_avaliacao, a.id_usuario, a.id_filme_tmdb, a.nota, 
-                   a.comentario, a.data_avaliacao, f.nome as titulo_filme
+                   a.comentario, a.data_avaliacao, f.titulo as titulo_filme
             FROM avaliacoes a
             JOIN filmes f ON a.id_filme_tmdb = f.id_filme_tmdb
             WHERE a.id_usuario = ?
