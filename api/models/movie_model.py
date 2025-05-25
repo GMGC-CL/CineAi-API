@@ -303,6 +303,39 @@ class Movie:
         else:
             return retorno
 
+    
+    @staticmethod  
+    def get_avaliacoes_usuario(user_id: str):
+        """
+            get_avaliacoes_usuario - função que retorna todas as avaliações feitas por um usuário específico
+    
+            :params user_id: id do usuário para buscar suas avaliações
+    
+            :return: retorna todas as avaliações do usuário com informações do filme
+        """
+        if not isinstance(user_id, str):
+            raise ValueError("Valor de usuário inválido")
+        
+        conn = get_db()
+        cursor = conn.cursor()
+        
+        # Query que junta avaliações com informações dos filmes
+        query = """
+            SELECT a.*, f.titulo, f.poster_path, f.ano_lancamento, f.media_votos
+            FROM avaliacoes a
+            JOIN filmes f ON a.id_filme_tmdb = f.id_filme_tmdb
+            WHERE a.id_usuario = ?
+            ORDER BY a.id_avaliacao DESC
+        """
+        
+        cursor.execute(query, (user_id,))
+        retorno = cursor.fetchall()
+        
+        if not retorno:
+            raise IndexError("Nenhuma avaliação encontrada para este usuário")
+        else:
+            return retorno
+
 
 if __name__ == '__main__':
     linhas = Movie.put_preference('1','1234')
