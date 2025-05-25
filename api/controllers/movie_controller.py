@@ -191,11 +191,11 @@ class Api:
             print('Não foi possível encontrar os filmes')
             return False
    
-    def get_avaliacoes_usuario(self, user_id: str):
+    def get_avaliacoes_usuario(self, user_id: int):
         """
             get_avaliacoes_usuario - função que retorna todas as avaliações de um usuário
     
-            :params user_id: id do usuário para consulta
+            :params user_id: id do usuário para consulta (INTEGER)
     
             :return: retorna lista com todas as avaliações do usuário
         """
