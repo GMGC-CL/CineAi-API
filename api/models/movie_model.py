@@ -320,12 +320,17 @@ class Movie:
         
         # Query que junta avaliações com informações dos filmes (usando apenas campos que existem)
         query = """
-            SELECT a.id_avaliacao, a.id_usuario, a.id_filme_tmdb, a.nota, 
-                   a.comentario, a.data_avaliacao, f.titulo as titulo_filme
+            SELECT a.id_usuario, a.id_filme_tmdb
             FROM avaliacoes a
-            JOIN filmes f ON a.id_filme_tmdb = f.id_filme_tmdb
             WHERE a.id_usuario = ?
-            ORDER BY a.data_avaliacao DESC
+              AND a.data_avaliacao = (
+                  SELECT MAX(data_avaliacao)
+                  FROM avaliacoes
+                  WHERE id_usuario = a.id_usuario
+                    AND id_filme_tmdb = a.id_filme_tmdb
+              )
+            GROUP BY a.id_filme_tmdb
+            ORDER BY a.data_avaliacao DESC;
         """
         
         cursor.execute(query, (user_id,))
